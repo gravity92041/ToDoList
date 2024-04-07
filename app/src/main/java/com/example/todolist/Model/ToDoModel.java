@@ -3,8 +3,15 @@ package com.example.todolist.Model;
 public class ToDoModel {
     private int id,status;
     private String task;
+    private String desc;
 
+    public String getDesc() {
+        return desc;
+    }
 
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public int getId() {
         return id;

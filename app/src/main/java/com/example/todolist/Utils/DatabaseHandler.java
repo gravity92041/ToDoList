@@ -21,8 +21,9 @@ public class DatabaseHandler  extends SQLiteOpenHelper {
     private static final String ID = "id";
     private static final String TASK = "task";
     private static final String STATUS = "status";
+    private static final String DESC = "desc";
     private static final String CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
-            + STATUS + " INTEGER)";
+            + STATUS + " INTEGER, "+DESC +" TEXT" +")";
     private SQLiteDatabase db;
 
     public DatabaseHandler(Context context){
@@ -48,6 +49,7 @@ public class DatabaseHandler  extends SQLiteOpenHelper {
     public void insertTask(ToDoModel task){
         ContentValues cv =  new ContentValues();
         cv.put(TASK,task.getTask());
+        cv.put(DESC,task.getDesc());
         cv.put(STATUS,0);
         db.insert(TODO_TABLE,null,cv);
     }
@@ -67,6 +69,7 @@ public class DatabaseHandler  extends SQLiteOpenHelper {
                         task.setId(cur.getInt(cur.getColumnIndex(ID)));
                         task.setTask(cur.getString(cur.getColumnIndex(TASK)));
                         task.setStatus(cur.getInt(cur.getColumnIndex(STATUS)));
+                        task.setDesc(cur.getString(cur.getColumnIndex(DESC)));
                         taskList.add(task);
                     }while (cur.moveToNext());
                 }
@@ -85,11 +88,13 @@ public class DatabaseHandler  extends SQLiteOpenHelper {
         db.update(TODO_TABLE,cv,ID+"=?",new String[]{String.valueOf(id)});
     }
 
-    public void updateTask(int id, String task){
+    public void updateTask(int id, String task,String desc){
         ContentValues cv = new ContentValues();
         cv.put(TASK,task);
+        cv.put(DESC,desc);
         db.update(TODO_TABLE,cv,ID+"=?",new String[]{String.valueOf(id)});
     }
+
 
     public void deleteTask(int id){
         db.delete(TODO_TABLE,ID+"=?",new String[]{String.valueOf(id)});

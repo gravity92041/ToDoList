@@ -27,6 +27,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
     public static final String TAG = "ActionBottomDialog";
 
     private EditText newTaskText;
+    private EditText newDescText;
     private Button newTaskSaveButton;
     private DatabaseHandler db;
 
@@ -51,6 +52,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         newTaskText = getView().findViewById(R.id.newTaskText);
+        newDescText =getView().findViewById(R.id.newDescText);
         newTaskSaveButton = getView().findViewById(R.id.newTaskButton);
 
         boolean isUpdate = false;
@@ -60,6 +62,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
             isUpdate = true;
             String task = bundle.getString("task");
             newTaskText.setText(task);
+            String desc = bundle.getString("desc");
+            newDescText.setText(desc);
             if (task.length() > 0)
                 newTaskSaveButton.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
         }
@@ -87,19 +91,43 @@ public class AddNewTask extends BottomSheetDialogFragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        newDescText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().equals("")) {
+                    newTaskSaveButton.setEnabled(false);
+                    newTaskSaveButton.setTextColor(Color.GRAY);
+                } else {
+                    newTaskSaveButton.setEnabled(true);
+                    newTaskSaveButton.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         final boolean finalisUpdate=isUpdate;
         newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = newTaskText.getText().toString();
+                String desc = newDescText.getText().toString();
                 if (finalisUpdate){
-                    db.updateTask(bundle.getInt("id"),text);
+                    db.updateTask(bundle.getInt("id"),text,desc);
+
                 }
                 else {
                     ToDoModel task = new ToDoModel();
                     task.setTask(text);
+                    task.setDesc(desc);
                     task.setStatus(0);
                     db.insertTask(task);
+
                 }
 
                 dismiss();
