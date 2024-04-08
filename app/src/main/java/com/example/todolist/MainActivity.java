@@ -24,10 +24,13 @@ import com.example.todolist.Model.ToDoModel;
 import com.example.todolist.Utils.DatabaseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements DialogCloseListener {
 
@@ -102,8 +105,12 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     }
     public void addToList(String task, String desc){
         StringBuilder sb = new StringBuilder();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        String dateTime = dateFormat.format(calendar.getTime());
         taskList = db.getAllTask();
-        sb.append("Задача ").append(task).append("; ").append("Описание ").append(desc);
+
+        sb.append(dateTime).append(": ").append("Задача ").append(task).append("; ").append("Описание ").append(desc);
         String value = sb.toString();
         arrayList.add(value);
     }
