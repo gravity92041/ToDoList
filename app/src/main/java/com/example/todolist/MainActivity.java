@@ -1,10 +1,16 @@
 package com.example.todolist;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.app.Dialog;
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private FloatingActionButton fab;
     private List<ToDoModel> taskList;
     private DatabaseHandler db;
+    private ArrayList<String>arrayList = new ArrayList<>();
+    private Button btnHistory,btnDeleteHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,43 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
                 AddNewTask.newInstance().show(getSupportFragmentManager(),AddNewTask.TAG);
             }
         });
+
+
+        btnHistory =findViewById(R.id.btnHistory);
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showListDialog(MainActivity.this,arrayList);
+            }
+        });
+
+    }
+    private void showListDialog(Context context, ArrayList<String> list){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.dialog_layout,null);
+        builder.setView(view);
+
+        ListView listView = view.findViewById(R.id.list_view);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1,list);
+        listView.setAdapter(adapter);
+        btnDeleteHistory = view.findViewById(R.id.btnDeleteHistory);
+        btnDeleteHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrayList.clear();
+            }
+        });
+        Dialog dialog = builder.create();
+        dialog.show();
+
+    }
+    public void addToList(String task, String desc){
+        StringBuilder sb = new StringBuilder();
+        taskList = db.getAllTask();
+        sb.append("Задача ").append(task).append("; ").append("Описание ").append(desc);
+        String value = sb.toString();
+        arrayList.add(value);
     }
 
     @Override
