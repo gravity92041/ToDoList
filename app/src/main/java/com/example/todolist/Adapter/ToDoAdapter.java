@@ -83,11 +83,11 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public void editItem(int position){
         ToDoModel item = todoList.get(position);
         Bundle bundle = new Bundle();
-        activity.addToList(item.getTask(),item.getDesc());
+
         bundle.putInt("id",item.getId());
         bundle.putString("task",item.getTask());
         bundle.putString("desc",item.getDesc());
-        AddNewTask fragment =  new AddNewTask();
+        AddNewTask fragment =  new AddNewTask(activity);
         fragment.setArguments(bundle);
         fragment.show(activity.getSupportFragmentManager(),AddNewTask.TAG);
 

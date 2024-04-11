@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddNewTask.newInstance().show(getSupportFragmentManager(),AddNewTask.TAG);
+                AddNewTask.newInstance(MainActivity.this).show(getSupportFragmentManager(),AddNewTask.TAG);
             }
         });
 
@@ -109,10 +109,11 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         String dateTime = dateFormat.format(calendar.getTime());
         taskList = db.getAllTask();
-
-        sb.append(dateTime).append(": ").append("Задача ").append(task).append("; ").append("Описание ").append(desc);
+        sb.append(dateTime).append(": ").append("Задача ");
+        sb.append(task).append("; ").append("Описание ").append(desc);
         String value = sb.toString();
         arrayList.add(value);
+
     }
 
     @Override

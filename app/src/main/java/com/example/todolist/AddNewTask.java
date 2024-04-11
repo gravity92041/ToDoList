@@ -28,16 +28,22 @@ public class AddNewTask extends BottomSheetDialogFragment {
 
     private EditText newTaskText;
     private EditText newDescText;
+    private MainActivity activity;
     private Button newTaskSaveButton;
     private DatabaseHandler db;
 
-    public static AddNewTask newInstance() {
-        return new AddNewTask();
+
+    public static AddNewTask newInstance(MainActivity activity) {
+        return new AddNewTask(activity);
+    }
+    public AddNewTask(MainActivity activity){
+        this.activity=activity;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setStyle(STYLE_NORMAL, R.style.DialogStyle);
     }
 
@@ -46,6 +52,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.new_task, container, false);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return view;
+
     }
 
     @Override
@@ -56,8 +63,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
         newTaskSaveButton = getView().findViewById(R.id.newTaskButton);
 
         boolean isUpdate = false;
+        Bundle bundle = getArguments();
 
-        final Bundle bundle = getArguments();
         if (bundle != null) {
             isUpdate = true;
             String task = bundle.getString("task");
@@ -113,18 +120,29 @@ public class AddNewTask extends BottomSheetDialogFragment {
         });
         final boolean finalisUpdate=isUpdate;
         newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
+            Bundle bundle = getArguments();
+
+
             @Override
             public void onClick(View v) {
-                String text = newTaskText.getText().toString();
-                String desc = newDescText.getText().toString();
-                if (finalisUpdate){
-                    db.updateTask(bundle.getInt("id"),text,desc);
 
+                String textNew = newTaskText.getText().toString();
+                String descNew = newDescText.getText().toString();
+                if (finalisUpdate){
+                    String task = bundle.getString("task");
+                    String desc = bundle.getString("desc");
+                    if (task.equals(textNew)&&desc.equals(descNew)){
+                        System.out.print(123);
+                    }
+                    else{
+                        activity.addToList(task,desc);
+                    }
+                    db.updateTask(bundle.getInt("id"),textNew,descNew);
                 }
                 else {
                     ToDoModel task = new ToDoModel();
-                    task.setTask(text);
-                    task.setDesc(desc);
+                    task.setTask(textNew);
+                    task.setDesc(descNew);
                     task.setStatus(0);
                     db.insertTask(task);
 
