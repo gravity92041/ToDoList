@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         taskList = db.getAllTask();
         Collections.reverse(taskList);
         tasksAdapter.setTasks(taskList);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +82,13 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         });
 
     }
+    public void checkAndResetIds() {
+        if (tasksAdapter.getItemCount() == 0) {
+            db.resetIds(); // Сброс идентификаторов
+        }
+
+    }
+
     private void showListDialog(Context context, ArrayList<String> list){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -102,16 +108,24 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         Dialog dialog = builder.create();
         dialog.show();
 
+
     }
-    public void addToList(String task, String desc){
+    public void addToList(String task, String desc, int id){
+        List<ToDoModel> taskListToShow;
         StringBuilder sb = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         String dateTime = dateFormat.format(calendar.getTime());
-        taskList = db.getAllTask();
-        sb.append(dateTime).append(": ").append("Задача ");
+        taskListToShow = db.getAllTask();
+        sb.append(dateTime).append(": ").append("Задача ["+ id+"]: ");
         sb.append(task).append("; ").append("Описание ").append(desc);
         String value = sb.toString();
+//        for (int i =0;i<taskListToShow.size();i++){
+//            new AlertDialog.Builder(MainActivity.this)
+//                    .setMessage(taskListToShow.get(i).toString())
+//                    .show();
+//
+//        }
         arrayList.add(value);
 
     }

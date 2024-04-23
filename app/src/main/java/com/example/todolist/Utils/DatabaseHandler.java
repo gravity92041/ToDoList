@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+import android.util.Log;
 
 import com.example.todolist.Model.ToDoModel;
 
@@ -47,6 +48,7 @@ public class DatabaseHandler  extends SQLiteOpenHelper {
     }
 
     public void insertTask(ToDoModel task){
+
         ContentValues cv =  new ContentValues();
         cv.put(TASK,task.getTask());
         cv.put(DESC,task.getDesc());
@@ -80,6 +82,12 @@ public class DatabaseHandler  extends SQLiteOpenHelper {
             cur.close();
         }
         return taskList;
+    }
+    public void resetIds() {
+        Log.d("ResetIds", "Before resetting ids");
+        db.execSQL("UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE NAME = 'todo'");
+        Log.d("ResetIds", "After resetting ids");
+
     }
 
     public void updateStatus(int id,int status){

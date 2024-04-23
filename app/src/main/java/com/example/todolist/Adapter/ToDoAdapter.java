@@ -41,7 +41,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder,int position){
         db.openDatabase();
         ToDoModel item = todoList.get(position);
-        holder.task.setText(item.getTask());
+        holder.task.setText("[" + item.getId()+"] "+item.getTask());
         holder.task.setChecked(toBoolean(item.getStatus()));
         holder.desc.setText(item.getDesc());
         holder.task.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -78,6 +78,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         db.deleteTask(item.getId());
         todoList.remove(position);
         notifyItemRemoved(position);
+        activity.checkAndResetIds();
     }
 
     public void editItem(int position){

@@ -36,4 +36,14 @@ public class ToDoModel {
     public void setTask(String task) {
         this.task = task;
     }
+
+    @Override
+    public String toString() {
+        return "ToDoModel{" +
+                "id=" + id +
+                ", status=" + status +
+                ", task='" + task + '\'' +
+                ", desc='" + desc + '\'' +
+                '}';
+    }
 }

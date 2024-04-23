@@ -122,7 +122,6 @@ public class AddNewTask extends BottomSheetDialogFragment {
         newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
             Bundle bundle = getArguments();
 
-
             @Override
             public void onClick(View v) {
 
@@ -135,7 +134,9 @@ public class AddNewTask extends BottomSheetDialogFragment {
                         System.out.print(123);
                     }
                     else{
-                        activity.addToList(task,desc);
+                        int id1 = bundle.getInt("id");
+                        activity.addToList(task,desc,id1);
+
                     }
                     db.updateTask(bundle.getInt("id"),textNew,descNew);
                 }
